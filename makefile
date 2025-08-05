@@ -1,5 +1,8 @@
-CFLAGS = -xc -std=c99 --target=wasm32 -g -nostdlib
+CFLAGS = -xc -std=c99 --target=wasm32 -nostdlib
 LFLAGS = -Wl,--no-entry -Wl,--export-all
 
-main.wasm: main.c
-	@clang $(CFLAGS) $(LFLAGS) -o main.wasm main.c
+debug:
+	@clang $(CFLAGS) $(LFLAGS) -g -o main.wasm main.c
+
+release:
+	@clang $(CFLAGS) $(LFLAGS) -Os -o main.wasm main.c
