@@ -1,4 +1,4 @@
-CFLAGS = -xc -std=c99 --target=wasm32 -nostdlib -nodefaultlibs
+CFLAGS = -xc -std=c99 --target=wasm32 -nostdlib -nodefaultlibs -fno-builtin
 LFLAGS = -Wl,--no-entry -Wl,--export-all
 
 debug:
