@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+body {
+	background-color: #080808;
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+canvas {
+	image-rendering: pixelated;
+	width: 560px;
+	height: 560px;
+}
+</style>
+</head>
+
+<body>
+<img hidden id="atlas" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFCAYAAABSIVz6AAAAAXNSR0IArs4c6QAAAFNJREFUKJGVkEEOACAIw2zi/788TyZkIiInAxusMqwkCUCSfLbrNX/5AKYfjaIYxOeVzvdlQbE9LeIOWRY0Eh+mLc4Ox56/M9+tP5y4Q1l9+w/xAgeBb9x9mqAEAAAAAElFTkSuQmCC" />
+<canvas id="canvas" width="140" height="140"></canvas>
+
+<script id="vert-shader" type="x-shader/x-vertex">
+attribute vec2 a_dst_pos;
+attribute vec2 a_src_pos;
+attribute vec4 a_color;
+varying vec4 v_color;
+varying vec2 v_uv;
+uniform vec2 u_resolution;
+void main() {
+	vec2 zero_to_one = a_dst_pos / u_resolution;
+	vec2 zero_to_two = zero_to_one * 2.0;
+	vec2 clipspace = zero_to_two - 1.0;
+	vec2 screenspace = clipspace * vec2(1, -1);
+	gl_Position = vec4(screenspace, 0, 1);
+	v_color = a_color;
+	v_uv = a_src_pos;
+}
+</script>
+
+<script id="frag-shader" type="x-shader/x-fragment">
+precision mediump float;
+varying vec4 v_color;
+varying vec2 v_uv;
+uniform sampler2D u_texture;
+void main() {
+	gl_FragColor = texture2D(u_texture, v_uv) * v_color;
+}
+</script>
+
+<script src="main.js"></script>
+</body>
+
+</html>
